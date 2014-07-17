@@ -1,15 +1,19 @@
 #/usr/bin/env sh
 
 _HELP=`cat <<EOF
-Usage: watchman <file-patterns> -- <command>
+Usage:
 
-file-patterns
+    watchman <FILE PATTERNS> -- <COMMAND>
+    watchman <FILE NAME> <COMMAND>
+
+
+FILE PATTERNS
 -------------
 Space separated file names/patterns which are to be watched by 'watchman'. This
 can also be a directory, in which case, all the files will be watched for
 changes.
 
-command
+COMMAND
 -------
 The command which is to be executed when a change is triggered. Since, watchman
 can watch multiple files, a you can use {file} as a placeholder in your
