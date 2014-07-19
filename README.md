@@ -8,8 +8,8 @@ watchman - lets you spend more time on your favourite editor
 SYNOPSIS
 --------
 
-    watchman <FILE PATTERNS> -- <COMMAND>
-    watchman <FILE NAME> <COMMAND>
+    watchman [OPTIONS] <FILE PATTERNS> -- <COMMAND>
+    watchman [OPTIONS] <FILE NAME> <COMMAND>
 
 DESCRIPTION
 -----------
@@ -25,6 +25,11 @@ tool ([inotify](https://github.com/rvoicilas/inotify-tools) that will tell you
 about changes, but nothing more. So, watchman just listens to what `inotifywait`
 says and executes commands.
 
+OPTIONS
+-------
+
+ -h Show detailed help
+
 FILE PATTERNS
 -------------
 Space separated file names/patterns which are to be watched by 'watchman'. This
@@ -36,6 +41,11 @@ COMMAND
 The command which is to be executed when a change is triggered. Since, watchman
 can watch multiple files, a you can use {file} as a placeholder in your
 command. It will automatically be replaced by the file which was modified.
+
+WATCHING SINGLE FILES
+---------------------
+In case you only have a single file as watch target, the delimter '--' can be
+skipped.
 
 EXAMPLES
 -------
@@ -57,7 +67,7 @@ EXAMPLES
 TODO
 ----
 
- - Makefile for watchman.
+ - Makefile.
  - Cycle through output colors in subsequent runs.
  - Support for long running processes. Eg. Reboot a web server. This will be
    useful in cases where corresponding server tool does not provide an option to

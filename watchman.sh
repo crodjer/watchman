@@ -1,10 +1,17 @@
 #/usr/bin/env sh
 
-_HELP=`cat <<EOF
+PROGRAM_NAME=$(basename $0)
+
+_HELP_VERBOSE=`cat <<EOF
 Usage:
 
-    watchman <FILE PATTERNS> -- <COMMAND>
-    watchman <FILE NAME> <COMMAND>
+    $PROGRAM_NAME [OPTIONS] <FILE PATTERNS> -- <COMMAND>
+    $PROGRAM_NAME [OPTIONS] <FILE NAME> <COMMAND>
+
+OPTIONS
+-------
+
+ -h Show detailed help
 
 
 FILE PATTERNS
@@ -19,9 +26,15 @@ The command which is to be executed when a change is triggered. Since, watchman
 can watch multiple files, a you can use {file} as a placeholder in your
 command. It will automatically be replaced by the file which was modified.
 
-Note:
+WATCHING SINGLE FILES
+---------------------
 In case you only have a single file as watch target, the delimter '--' can be
 skipped.
+EOF
+`
+_HELP=`cat <<EOF
+Usage: $PROGRAM_NAME [OPTIONS] <FILE PATTERNS> -- <COMMAND>
+Use $PROGRAM_NAME -h for more help.
 EOF
 `
 
@@ -45,8 +58,7 @@ color () {
 
 show_help () {
     if [[ "$1" == "stdin" ]]; then
-        color green
-        echo "$_HELP"
+        echo "$_HELP_VERBOSE"
     else
         color yellow
         printf "\n\n$_HELP\n" >&2
@@ -67,11 +79,26 @@ success () {
     color reset
 }
 
+while getopts :h opt; do
+  case $opt in
+      h)
+          show_help stdin
+          exit 0
+          ;;
+      \?)
+          error "Invalid option: -$OPTARG" >&2
+          exit 1
+  esac
+
+  shift $(($OPTIND-1))
+done
+
 args="$@"
 
 if [[ "$args" == "" ]]; then
-    show_help stdin
-    exit 0
+    error "No arguments provided"
+    show_help
+    exit 1
 fi
 
 # In case the delimiter `--` is not present, assume that only one file was
