@@ -21,7 +21,7 @@ course is very useful, but not in all the cases. A lot of times you want to
 watch on space (files) too.
 
 Basically, when a file changes, I want to execute a command. There is a great
-tool ([inotify](https://github.com/rvoicilas/inotify-tools) that will tell you
+tool ([inotify](https://github.com/rvoicilas/inotify-tools)) that will tell you
 about changes, but nothing more. So, watchman just listens to what `inotifywait`
 says and executes commands.
 
