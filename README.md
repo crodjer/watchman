@@ -62,7 +62,7 @@ EXAMPLES
  - Watch on a few Python scripts and execute a script which it changes. This
    uses the placeholder {file} to fill in the correct name.
 
-        watchman scripts/*.py scripts/**/*.py -- python {file}
+        watchman scripts/**/*.py -- python {file}
 
 TODO
 ----
