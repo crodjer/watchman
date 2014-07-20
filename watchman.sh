@@ -147,15 +147,18 @@ inotifywait -mre $events --format '%w%f' $files | while read file_name; do
         _prev_key="$_current_key"
 
         color yellow
+
         _cmd="$(echo $command | sed "s#{file}#$file_name#g")"
         output=$(bash -c "$_cmd")
+        _status="$?"
+
         color reset
 
         if [ "$output" != "" ]; then
             output="$output\n"
         fi
 
-        if [ "$?" == "0" ]; then
+        if [ "$_status" == "0" ]; then
             if [ "$output" == "" ]; then
                 output="Success!\n"
             fi
