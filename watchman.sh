@@ -137,14 +137,19 @@ fi
 # Make stderr yellow
 color yellow
 
-events="modify,attrib,moved_to,create,delete"
-inotifywait -mre $events --format '%w%f' $files | while read file_name; do
-    _current_key="$(date +"%s")-$file_name"
+inotify_events="modify,attrib,moved_to,create,delete"
+inotify_flags="--timefmt %s --format %T-%e-%w%f"
 
-    if [ "$_prev_key" != "$_current_key" ]; then
+inotifywait -mre $inotify_events $inotify_flags $files | while read key; do
+
+    timestamp=$(echo $key | cut -d '-' -f 1)
+    events=$(echo $key | cut -d '-' -f 2)
+    file_name=$(echo $key | cut -d '-' -f 3-)
+
+    if [ "$_prev_key" != "$key" ]; then
         # This helps us prevent firing the command multiple times, because
         # inotify raises multiple events
-        _prev_key="$_current_key"
+        _prev_key="$key"
 
         color yellow
 
