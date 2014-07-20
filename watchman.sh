@@ -146,7 +146,7 @@ inotifywait -mre $events --format '%w%f' $files | while read file_name; do
         # inotify raises multiple events
         _prev_key="$_current_key"
 
-        color red
+        color yellow
         _cmd="$(echo $command | sed "s#{file}#$file_name#g")"
         output=$(bash -c "$_cmd")
         color reset
