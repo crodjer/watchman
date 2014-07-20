@@ -156,8 +156,14 @@ inotifywait -mre $events --format '%w%f' $files | while read file_name; do
         fi
 
         if [ "$?" == "0" ]; then
+            if [ "$output" == "" ]; then
+                output="Success!\n"
+            fi
             success "$output"
         else
+            if [ "$output" == "" ]; then
+                output="Failed!\n"
+            fi
             error "$output"
         fi
     fi
