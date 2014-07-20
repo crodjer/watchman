@@ -69,13 +69,13 @@ show_help () {
 
 error () {
     color red
-    printf "$@" 1>&2
+    cat "$@"
     color reset
 }
 
 success () {
     color green
-    printf "$@"
+    cat "$@"
     color reset
 }
 
@@ -146,20 +146,20 @@ inotifywait -mre $events --format '%w%f' $files | while read file_name; do
         # inotify raises multiple events
         _prev_key="$_current_key"
 
-        color yellow
+        _temp=$(mktemp -d /tmp/watchman.XXXXXXXXXXXXXXXX)
         _cmd="$(echo $command | sed "s#{file}#$file_name#g")"
-        output=$(bash -c "$_cmd")
-        color reset
 
-        if [ "$output" != "" ]; then
-            output="$output\n"
-        fi
+        output=$(bash -c "$_cmd" 1> $_temp/stdout 2> $_temp/stderr)
 
         if [ "$?" == "0" ]; then
-            success "$output"
+            success "$_temp/stderr" >&2
+            success "$_temp/stdout"
         else
-            error "$output"
+            error "$_temp/stderr" >&2
+            error "$_temp/stdout"
         fi
+
+        rm -r "$_temp" 2>&1 >/dev/null
     fi
 done
 
