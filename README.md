@@ -3,7 +3,7 @@ Watchman
 
 NAME
 ----
-watchman - lets you spend more time on your favourite editor
+watchman - execute a command when something changes
 
 SYNOPSIS
 --------
