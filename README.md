@@ -16,14 +16,19 @@ DESCRIPTION
 
 **Execute a command as things change in file(s)/directory(s).**
 
-I have always wanted a `watch` tool. Not that time based watch command, which of
-course is very useful, but not in all the cases. A lot of times you want to
-watch on space (files) too.
+I have always wanted a `watch` tool which instead of being based on time (the
+watch command) will be based on space (files). That is what watch `watchman` is.
 
-Basically, when a file changes, I want to execute a command. There is a great
-tool ([inotify](https://github.com/rvoicilas/inotify-tools)) that will tell you
-about changes, but nothing more. So, watchman just listens to what `inotifywait`
-says and executes commands.
+It uses [inotify tools](https://github.com/rvoicilas/inotify-tools) to provide
+that functionality. Basically, watchman just listens to what `inotifywait` (from
+intoify-tools package of your distribution) says and executes commands.
+
+This basically provides a continuous execution system, while not having to set
+up a elaborate project configuration (say, when what you are working on is just
+a tiny script).
+
+In case of bigger projects, you could also have a test suit which needs to be
+run when you edit a project file.
 
 OPTIONS
 -------
