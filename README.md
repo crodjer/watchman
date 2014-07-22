@@ -20,7 +20,7 @@ I have always wanted a `watch` tool which instead of being based on time (the
 watch command) will be based on space (files). That is what watch `watchman` is.
 
 It uses [inotify tools](https://github.com/rvoicilas/inotify-tools) to provide
-that functionality. Basically, watchman just listens to what `inotifywait` (from
+that functionality. Watchman just listens to what `inotifywait` (from
 intoify-tools package of your distribution) says and executes commands.
 
 This basically provides a continuous execution system, while not having to set
