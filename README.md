@@ -78,8 +78,8 @@ EXAMPLES
 TODO
 ----
 
- - Makefile.
- - Cycle through output colors in subsequent runs.
  - Support for long running processes. Eg. Reboot a web server. This will be
    useful in cases where corresponding server tool does not provide an option to
    auto-reload.
+ - Cycle through output colors in subsequent runs.
+ - Makefile.
