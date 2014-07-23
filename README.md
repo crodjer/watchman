@@ -75,6 +75,12 @@ EXAMPLES
 
         watchman -v scripts/**/*.py -- python {file}
 
+WHY THIS PROJECT?
+-----------------
+
+ - I badly needed a utility like this.
+ - I wanted to get my hands dirty with a proper bash based project.
+
 TODO
 ----
 
@@ -83,3 +89,4 @@ TODO
    auto-reload.
  - Cycle through output colors in subsequent runs.
  - Makefile.
+ - Real MAN pages, instead of MAN like README doc.
