@@ -69,13 +69,13 @@ show_help () {
 
 error () {
     color red
-    printf "$@" 1>&2
+    printf "$@\n"
     color reset
 }
 
 success () {
     color green
-    printf "$@"
+    printf "$@\n"
     color reset
 }
 
@@ -96,7 +96,7 @@ done
 args="$@"
 
 if [[ "$args" == "" ]]; then
-    error "No arguments provided"
+    error "No arguments provided" >&2
     show_help
     exit 1
 fi
@@ -123,13 +123,13 @@ while [ $# -gt 0 ]; do
 done
 
 if [[ "$files" == "" ]]; then
-    error "No files provided to watch on."
+    error "No files provided to watch on." >&2
     show_help
     exit 1
 fi
 
 if [[ "$command" == "" ]]; then
-    error "Command should not be blank."
+    error "Command should not be blank." >&2
     show_help
     exit 1
 fi
@@ -159,20 +159,16 @@ inotifywait -mre $inotify_events $inotify_flags $files | while read key; do
 
         color reset
 
-        if [ "$output" != "" ]; then
-            output="$output\n"
-        fi
-
         if [ "$_status" == "0" ]; then
-            if [ "$output" == "" ]; then
-                output="Success!\n"
+            if [ "$output" != "" ]; then
+                success "$output"
             fi
-            success "$output"
+            success "Success!" >&2
         else
-            if [ "$output" == "" ]; then
-                output="Failed!\n"
+            if [ "$output" != "" ]; then
+                error "$output"
             fi
-            error "$output"
+            error "Failed!" >&2
         fi
     fi
 done

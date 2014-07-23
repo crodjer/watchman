@@ -30,6 +30,9 @@ a tiny script).
 In case of bigger projects, you could also have a test suit which needs to be
 run when you edit a project file.
 
+Watchman also takes special care of not cluttering the `STDOUT`. Everything that
+is not an actual command `STDOUT`, is directed to STDERR.
+
 OPTIONS
 -------
 
