@@ -57,6 +57,20 @@ WATCHING SINGLE FILES
 In case you only have a single file as watch target, the delimter '--' can be
 skipped.
 
+INSTALL
+-------
+
+ - Checkout `cd` to the the source code.
+ - To install, run `make install`.
+ - To uninstall, run `make uninstall`.
+ - If you are modifying watchman and want those changes to reflect automatically
+   on next execution, then run: `make develop`. This just symlinks the script to
+   the project directory.
+ - Available parameters:
+
+    - **PREFIX**: Location of installation. (default: `/usr/local/bin`)
+    - **EXECUTABLE**: Name of the executable file. (default: `watchman`)
+
 EXAMPLES
 -------
 
@@ -88,5 +102,4 @@ TODO
    useful in cases where corresponding server tool does not provide an option to
    auto-reload.
  - Cycle through output colors in subsequent runs.
- - Makefile.
  - Real MAN pages, instead of MAN like README doc.
