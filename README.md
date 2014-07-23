@@ -93,7 +93,8 @@ WHY THIS PROJECT?
 -----------------
 
  - I badly needed a utility like this.
- - I wanted to get my hands dirty with a proper bash based project.
+ - I wanted to get my hands dirty with a proper bash based project and
+   Makefiles.
 
 TODO
 ----
