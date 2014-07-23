@@ -36,7 +36,9 @@ is not an actual command `STDOUT`, is directed to STDERR.
 OPTIONS
 -------
 
- -h Show detailed help
+    -h Show detailed help
+    -v Verbose output
+    -r Watch files recursively
 
 FILE PATTERNS
 -------------
@@ -62,15 +64,16 @@ EXAMPLES
 
         watchman sample.sh ./sample.sh
 
- - Watch on the Haskell project under the current directory and run `Main.hs`
-   when anything is changed in it.
+ - Watch on the Haskell project under the current directory recursively and run
+   `Main.hs` when anything is changed in it.
 
-        watchman . -- runhaskell Main.hs
+        watchman -r . -- runhaskell Main.hs
 
  - Watch on a few Python scripts and execute a script which it changes. This
-   uses the placeholder {file} to fill in the correct name.
+   uses the placeholder {file} to fill in the correct name. Give more verbose
+   output since multiple files are being watched.
 
-        watchman scripts/**/*.py -- python {file}
+        watchman -v scripts/**/*.py -- python {file}
 
 TODO
 ----

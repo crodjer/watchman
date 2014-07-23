@@ -12,7 +12,8 @@ OPTIONS
 -------
 
  -h Show detailed help
-
+ -v Verbose output
+ -r Watch files recursively
 
 FILE PATTERNS
 -------------
@@ -67,6 +68,12 @@ show_help () {
     color reset
 }
 
+stderr () {
+    color yellow
+    printf "$@\n" >&2
+    color reset
+}
+
 error () {
     color red
     printf "$@\n"
@@ -79,11 +86,17 @@ success () {
     color reset
 }
 
-while getopts :h opt; do
+while getopts :hvr opt; do
   case $opt in
+      v)
+          verbose=1
+          ;;
       h)
           show_help stdin
           exit 0
+          ;;
+      r)
+          inotify_bool_flags="r"
           ;;
       \?)
           error "Invalid option: -$OPTARG" >&2
@@ -134,13 +147,25 @@ if [[ "$command" == "" ]]; then
     exit 1
 fi
 
-# Make stderr yellow
-color yellow
+if [ -z "$verbose" ]; then
+    inotify_bool_flags="q$inotify_flags"
+fi
+
+if [[ "$inotify_bool_flags" ]]; then
+    inotify_bool_flags="-$inotify_bool_flags"
+fi
 
 inotify_events="modify,attrib,moved_to,create,delete"
-inotify_flags="--timefmt %s --format %T-%e-%w%f"
+inotify_flags="$inotify_bool_flags -m --timefmt %s --format %T-%e-%w%f -e"
+inotify_cmd="inotifywait $inotify_flags $inotify_events $files"
 
-inotifywait -mre $inotify_events $inotify_flags $files | while read key; do
+if [[ "$verbose" ]]; then
+    stderr "Will watch: $files"
+fi
+
+# Make stderr yellow
+color yellow
+$inotify_cmd | while read key; do
 
     timestamp=$(echo $key | cut -d '-' -f 1)
     events=$(echo $key | cut -d '-' -f 2)
@@ -153,6 +178,10 @@ inotifywait -mre $inotify_events $inotify_flags $files | while read key; do
 
         color yellow
 
+        if [[ "$verbose" ]]; then
+            stderr "[$(date)] $file_name: $events"
+        fi
+
         _cmd="$(echo $command | sed "s#{file}#$file_name#g")"
         output=$(bash -c "$_cmd")
         _status="$?"
@@ -163,11 +192,13 @@ inotifywait -mre $inotify_events $inotify_flags $files | while read key; do
             if [ "$output" != "" ]; then
                 success "$output"
             fi
+
             success "Success!" >&2
         else
             if [ "$output" != "" ]; then
                 error "$output"
             fi
+
             error "Failed!" >&2
         fi
     fi
