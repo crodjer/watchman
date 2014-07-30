@@ -64,7 +64,7 @@ show_help () {
         echo "$_HELP_VERBOSE"
     else
         color yellow
-        printf "\n\n$_HELP\n" >&2
+        printf "\n$_HELP\n" >&2
     fi
 
     color reset
