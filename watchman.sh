@@ -102,9 +102,9 @@ while getopts :hvr opt; do
           error "Invalid option: -$OPTARG" >&2
           exit 1
   esac
-
-  shift $(($OPTIND-1))
 done
+
+shift $(($OPTIND-1))
 
 args="$@"
 
