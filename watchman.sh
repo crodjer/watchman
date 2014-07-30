@@ -100,7 +100,11 @@ while getopts :hvrx: opt; do
             inotify_bool_flags="r"
             ;;
         x)
-            inotify_exclude="--exclude $OPTARG $inotify_exclude"
+            if [[ -z "$inotify_exclude" ]]; then
+                inotify_exclude="$OPTARG"
+            else
+                inotify_exclude="($OPTARG)|($inotify_exclude)"
+            fi
             ;;
         \?)
             error "Invalid option: -$OPTARG" >&2
@@ -158,6 +162,11 @@ fi
 if [[ "$inotify_bool_flags" ]]; then
     inotify_bool_flags="-$inotify_bool_flags"
 fi
+
+if [[ "$inotify_exclude" ]]; then
+    inotify_exclude="--exclude $inotify_exclude"
+fi
+
 
 inotify_events="-e modify,attrib,moved_to,create,delete"
 inotify_flags="$inotify_bool_flags -m --timefmt %s --format %T-%e-%w%f"
