@@ -98,7 +98,7 @@ while getopts :hvrbx: opt; do
             exit 0
             ;;
         r)
-            inotify_bool_flags="r"
+            inotify_bool_flags="r$inotify_bool_flags"
             ;;
         x)
             if [[ -z "$inotify_exclude" ]]; then
@@ -161,7 +161,7 @@ if [[ "$command" == "" ]]; then
 fi
 
 if [ -z "$verbose" ]; then
-    inotify_bool_flags="q$inotify_flags"
+    inotify_bool_flags="q$inotify_bool_flags"
 fi
 
 if [[ "$inotify_bool_flags" ]]; then
