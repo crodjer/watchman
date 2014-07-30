@@ -36,9 +36,10 @@ actual command can write to `STDOUT`.
 OPTIONS
 -------
 
-    -h Show detailed help
-    -v Verbose output
-    -r Watch files recursively
+     -h          Show detailed help
+     -v          Verbose output
+     -x PATTERN  Exclude files matching PATTERN (POSIX extended regular expression)
+     -r          Watch files recursively
 
 FILE PATTERNS
 -------------

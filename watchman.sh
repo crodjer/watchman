@@ -11,9 +11,10 @@ Usage:
 OPTIONS
 -------
 
- -h Show detailed help
- -v Verbose output
- -r Watch files recursively
+ -h          Show detailed help
+ -v          Verbose output
+ -x PATTERN  Exclude files matching PATTERN (POSIX extended regular expression)
+ -r          Watch files recursively
 
 FILE PATTERNS
 -------------
@@ -86,7 +87,7 @@ success () {
     color reset
 }
 
-while getopts :hvr opt; do
+while getopts :hvrx: opt; do
     case $opt in
         v)
             verbose=1
@@ -97,6 +98,9 @@ while getopts :hvr opt; do
             ;;
         r)
             inotify_bool_flags="r"
+            ;;
+        x)
+            inotify_exclude="--exclude $OPTARG $inotify_exclude"
             ;;
         \?)
             error "Invalid option: -$OPTARG" >&2
@@ -155,9 +159,9 @@ if [[ "$inotify_bool_flags" ]]; then
     inotify_bool_flags="-$inotify_bool_flags"
 fi
 
-inotify_events="modify,attrib,moved_to,create,delete"
-inotify_flags="$inotify_bool_flags -m --timefmt %s --format %T-%e-%w%f -e"
-inotify_cmd="inotifywait $inotify_flags $inotify_events $files"
+inotify_events="-e modify,attrib,moved_to,create,delete"
+inotify_flags="$inotify_bool_flags -m --timefmt %s --format %T-%e-%w%f"
+inotify_cmd="inotifywait $inotify_flags $inotify_events $inotify_exclude $files"
 
 if [[ "$verbose" ]]; then
     stderr "Will watch: $files"
