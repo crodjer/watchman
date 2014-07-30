@@ -87,21 +87,21 @@ success () {
 }
 
 while getopts :hvr opt; do
-  case $opt in
-      v)
-          verbose=1
-          ;;
-      h)
-          show_help stdin
-          exit 0
-          ;;
-      r)
-          inotify_bool_flags="r"
-          ;;
-      \?)
-          error "Invalid option: -$OPTARG" >&2
-          exit 1
-  esac
+    case $opt in
+        v)
+            verbose=1
+            ;;
+        h)
+            show_help stdin
+            exit 0
+            ;;
+        r)
+            inotify_bool_flags="r"
+            ;;
+        \?)
+            error "Invalid option: -$OPTARG" >&2
+            exit 1
+    esac
 done
 
 shift $(($OPTIND-1))
