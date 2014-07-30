@@ -112,6 +112,7 @@ while getopts :hvrbx: opt; do
             ;;
         \?)
             error "Invalid option: -$OPTARG" >&2
+            show_help
             exit 1
     esac
 done
