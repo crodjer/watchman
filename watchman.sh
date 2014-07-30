@@ -15,6 +15,7 @@ OPTIONS
  -v          Verbose output
  -x PATTERN  Exclude files matching PATTERN (POSIX extended regular expression)
  -r          Watch files recursively
+ -b          Beep when command execution fails
 
 FILE PATTERNS
 -------------
@@ -87,7 +88,7 @@ success () {
     color reset
 }
 
-while getopts :hvrx: opt; do
+while getopts :hvrbx: opt; do
     case $opt in
         v)
             verbose=1
@@ -105,6 +106,9 @@ while getopts :hvrx: opt; do
             else
                 inotify_exclude="($OPTARG)|($inotify_exclude)"
             fi
+            ;;
+        b)
+            bell_on_error=1
             ;;
         \?)
             error "Invalid option: -$OPTARG" >&2
@@ -212,6 +216,9 @@ $inotify_cmd | while read key; do
                 error "$output"
             fi
 
+            if [[ "$bell_on_error" ]]; then
+                error "\a" >&2
+            fi
             error "Failed!" >&2
         fi
     fi

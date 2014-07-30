@@ -40,6 +40,7 @@ OPTIONS
      -v          Verbose output
      -x PATTERN  Exclude files matching PATTERN (POSIX extended regular expression)
      -r          Watch files recursively
+     -b          Beep when command execution fails
 
 FILE PATTERNS
 -------------
