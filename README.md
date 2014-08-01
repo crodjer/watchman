@@ -51,8 +51,26 @@ changes.
 COMMAND
 -------
 The command which is to be executed when a change is triggered. Since, watchman
-can watch multiple files, a you can use {file} as a placeholder in your
-command. It will automatically be replaced by the file which was modified.
+can watch multiple files, there are a few file placeholders available which will
+be filled in appropriately at execution time. To use a placeholder just write it
+in braces in your command.  Eg: {dir_name}/{base_prefix}.out
+
+
+PLACEHOLDERS
+------------
+The following placeholders are available to be used in a command.
+
+**file**  
+The relative path to the file from current directory. Eg: ./foo/bar/foobar.baz
+
+**base_name**  
+The base name of the file. Eg: foobar.baz
+
+**dir_name**  
+The relative path to the directory file is in. Eg: ./foo/bar/
+
+**base_prefix**  
+The file name without the file extension. Eg: foobar
 
 WATCHING SINGLE FILES
 ---------------------
@@ -90,6 +108,11 @@ EXAMPLES
    output since multiple files are being watched.
 
         watchman -v scripts/**/*.py -- python {file}
+
+ - Automatically build and execute a C file on change. This demonstrates the use
+   of `dir_name` and `base_prefix` placeholders.
+
+        watchman -vrb -x '.*.out' . -- 'gcc {file} -o {dir_name}/{base_prefix}.out && {dir_name}/{base_prefix}.out'
 
 WHY THIS PROJECT?
 -----------------

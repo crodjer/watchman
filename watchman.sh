@@ -26,8 +26,26 @@ changes.
 COMMAND
 -------
 The command which is to be executed when a change is triggered. Since, watchman
-can watch multiple files, a you can use {file} as a placeholder in your
-command. It will automatically be replaced by the file which was modified.
+can watch multiple files, there are a few file placeholders available which will
+be filled in appropriately at execution time. To use a placeholder just write it
+in braces in your command.  Eg: {dir_name}/{base_prefix}.out
+
+
+PLACEHOLDERS
+------------
+The following placeholders are available to be used in a command.
+
+**file**  
+The relative path to the file from current directory. Eg: ./foo/bar/foobar.baz
+
+**base_name**  
+The base name of the file. Eg: foobar.baz
+
+**dir_name**  
+The relative path to the directory file is in. Eg: ./foo/bar/
+
+**base_prefix**  
+The file name without the file extension. Eg: foobar
 
 WATCHING SINGLE FILES
 ---------------------
@@ -174,7 +192,7 @@ fi
 
 
 inotify_events="-e modify,attrib,moved_to,create,delete"
-inotify_flags="$inotify_bool_flags -m --timefmt %s --format %T-%e-%w%f"
+inotify_flags="$inotify_bool_flags -m --timefmt %s --format %T|%e|%w%f"
 inotify_cmd="inotifywait $inotify_flags $inotify_events $inotify_exclude $files"
 
 if [[ "$verbose" ]]; then
@@ -185,9 +203,16 @@ fi
 color yellow
 $inotify_cmd | while read key; do
 
-    timestamp=$(echo $key | cut -d '-' -f 1)
-    events=$(echo $key | cut -d '-' -f 2)
-    file_name=$(echo $key | cut -d '-' -f 3-)
+    _cut () {
+        echo $key | cut -d '|' -f $@
+    }
+
+    timestamp=$(_cut 1)
+    events=$(_cut 2)
+    file=$(_cut 3-)
+    base_name=$(basename $file)
+    dir_name=$(dirname $file)
+    base_prefix=${base_name%%.*}
 
     if [ "$_prev_key" != "$key" ]; then
         # This helps us prevent firing the command multiple times, because
@@ -200,7 +225,11 @@ $inotify_cmd | while read key; do
             stderr "[$(date)] $file_name: $events"
         fi
 
-        _cmd="$(echo $command | sed "s#{file}#$file_name#g")"
+        _cmd="$command"
+        _cmd="$(echo $_cmd | sed "s#{file}#$file#g")"
+        _cmd="$(echo $_cmd | sed "s#{base_name}#$base_name#g")"
+        _cmd="$(echo $_cmd | sed "s#{dir_name}#$dir_name#g")"
+        _cmd="$(echo $_cmd | sed "s#{base_prefix}#$base_prefix#g")"
         output=$(bash -c "$_cmd")
         _status="$?"
 
