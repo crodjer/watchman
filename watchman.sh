@@ -1,4 +1,4 @@
-#/usr/bin/env sh
+#/usr/bin/env bash
 
 PROGRAM_NAME=$(basename $0)
 
