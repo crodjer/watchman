@@ -59,6 +59,8 @@ Use $PROGRAM_NAME -h for more help.
 EOF
 `
 
+_DEFAULT_EXCLUDES='.git/index.lock foo'
+
 color () {
     case $1 in
         red)
@@ -106,6 +108,14 @@ success () {
     color reset
 }
 
+add_exclude () {
+    if [[ -z "$inotify_exclude" ]]; then
+        inotify_exclude="($1)"
+    else
+        inotify_exclude="($1)|$inotify_exclude"
+    fi
+}
+
 while getopts :hvrbx: opt; do
     case $opt in
         v)
@@ -119,11 +129,7 @@ while getopts :hvrbx: opt; do
             inotify_bool_flags="r$inotify_bool_flags"
             ;;
         x)
-            if [[ -z "$inotify_exclude" ]]; then
-                inotify_exclude="$OPTARG"
-            else
-                inotify_exclude="($OPTARG)|($inotify_exclude)"
-            fi
+            add_exclude $OPTARG
             ;;
         b)
             bell_on_error=1
@@ -133,6 +139,10 @@ while getopts :hvrbx: opt; do
             show_help
             exit 1
     esac
+done
+
+for _exclude in $_DEFAULT_EXCLUDES; do
+    add_exclude $_exclude
 done
 
 shift $(($OPTIND-1))
