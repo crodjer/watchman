@@ -235,27 +235,22 @@ $inotify_cmd | while read key; do
             stderr "[$(date)] $file_name: $events"
         fi
 
+        color reset
+
         _cmd="$command"
         _cmd="$(echo $_cmd | sed "s#{file}#$file#g")"
         _cmd="$(echo $_cmd | sed "s#{base_name}#$base_name#g")"
         _cmd="$(echo $_cmd | sed "s#{dir_name}#$dir_name#g")"
         _cmd="$(echo $_cmd | sed "s#{base_prefix}#$base_prefix#g")"
-        output=$(bash -c "$_cmd")
+
+        bash -c "$_cmd"
         _status="$?"
 
         color reset
 
         if [ "$_status" == "0" ]; then
-            if [ "$output" != "" ]; then
-                success "$output"
-            fi
-
             success "Success!" >&2
         else
-            if [ "$output" != "" ]; then
-                error "$output"
-            fi
-
             if [[ "$bell_on_error" ]]; then
                 error "\a" >&2
             fi
