@@ -243,7 +243,7 @@ $inotify_cmd | while read key; do
         _cmd="$(echo $_cmd | sed "s#{dir_name}#$dir_name#g")"
         _cmd="$(echo $_cmd | sed "s#{base_prefix}#$base_prefix#g")"
 
-        bash -c "$_cmd"
+        eval $_cmd
         _status="$?"
 
         color reset
