@@ -61,19 +61,24 @@ EOF
 
 _DEFAULT_EXCLUDES='.git/index.lock foo'
 
+RED=$(tput setaf 1)
+GREEN=$(tput setaf 2)
+YELLOW=$(tput setaf 3)
+FACE_RESET=$(tput sgr0)
+
 color () {
     case $1 in
         red)
-            _col='\e[0;31m'
+            _col=$RED
             ;;
         yellow)
-            _col='\e[0;33m'
+            _col=$YELLOW
             ;;
         green)
-            _col='\e[0;32m'
+            _col=$GREEN
             ;;
         *)
-            _col='\e[0m'
+            _col=$FACE_RESET
     esac
 
     printf $_col
@@ -245,8 +250,6 @@ $inotify_cmd | while read key; do
 
         eval $_cmd
         _status="$?"
-
-        color reset
 
         if [ "$_status" == "0" ]; then
             success "Success!" >&2
