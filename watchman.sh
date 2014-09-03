@@ -237,7 +237,7 @@ $inotify_cmd | while read key; do
         color yellow
 
         if [[ "$verbose" ]]; then
-            stderr "[$(date)] $file_name: $events"
+            stderr "[$(date)] $base_name: $events"
         fi
 
         color reset
