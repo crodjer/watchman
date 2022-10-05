@@ -21,7 +21,7 @@ watch command) will be based on space (files). That is what watch `watchman` is.
 
 It uses [inotify tools](https://github.com/rvoicilas/inotify-tools) to provide
 that functionality. Watchman just listens to what `inotifywait` (from
-intoify-tools package of your distribution) says and executes commands.
+inotify-tools package of your distribution) says and executes commands.
 
 This basically provides a continuous execution system, while not having to set
 up a elaborate project configuration (say, when what you are working on is just
