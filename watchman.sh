@@ -252,7 +252,7 @@ $inotify_cmd | while read key; do
         _status="$?"
 
         if [ "$_status" == "0" ]; then
-            success "Success!" >&2
+            success "Success!" >&1
         else
             if [[ "$bell_on_error" ]]; then
                 error "\a" >&2
