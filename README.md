@@ -1,12 +1,6 @@
 Watchman
 ========
 
-> This is an old script which I wrote for my personal needs and haven't used since a long time.
-
-> Answering for the sudden interest observed [on HN](https://news.ycombinator.com/item?id=33094829).
-> The name `watchman` seemd like a reasonable name for what this utlity does. I had no knowledge of existance
-> of a similar utility by Facebook when I wrote this.
-
 NAME
 ----
 watchman - execute a command when something changes
